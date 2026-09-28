@@ -8,8 +8,8 @@ const mongoose = require("mongoose");
 
 dotenv.config();
 
-const ConnectDB = require("./config/db");
-const errorHandler = require("./middleware/error.middleware");
+const ConnectDB = require("../config/db");
+const errorHandler = require("../middleware/error.middleware");
 
 const app = express();
 
@@ -30,8 +30,8 @@ ConnectDB();
 // Auto-generate tips for all users on startup
 setTimeout(async () => {
   try {
-    const User = require("./models/User");
-    const { generateTipsForUser } = require("./services/tip.service");
+    const User = require("../models/User");
+    const { generateTipsForUser } = require("../services/tip.service");
     const users = await User.find({ role: "student", isActive: true });
     for (const u of users) {
       try {
@@ -70,25 +70,25 @@ app.get("/", (req, res) => {
 });
 
 
-app.use("/api/auth", require("./routes/auth.routes"));
-app.use("/api/users", require("./routes/user.routes"));
-app.use("/api/categories", require("./routes/category.routes"));
-app.use("/api/transactions", require("./routes/transaction.routes"));
-app.use("/api/budgets", require("./routes/budget.routes"));
-app.use("/api/recurring", require("./routes/recurring.routes"));
-app.use("/api/saving-tips", require("./routes/savingTip.routes"));
-app.use("/api/insights", require("./routes/insight.routes"));
-app.use("/api/notifications", require("./routes/notification.routes"));
-app.use("/api/bookmarks", require("./routes/bookmark.routes"));
-app.use("/api/notes", require("./routes/note.routes"));
-app.use("/api/reports", require("./routes/report.routes"));
-app.use("/api/dashboard", require("./routes/dashboard.routes"));
-app.use("/api/import", require("./routes/import.routes"));
-app.use("/api/ai", require("./routes/ai.routes"));
-app.use("/api/activity", require("./routes/activity.routes"));
+app.use("/api/auth", require("../routes/auth.routes"));
+app.use("/api/users", require("../routes/user.routes"));
+app.use("/api/categories", require("../routes/category.routes"));
+app.use("/api/transactions", require("../routes/transaction.routes"));
+app.use("/api/budgets", require("../routes/budget.routes"));
+app.use("/api/recurring", require("../routes/recurring.routes"));
+app.use("/api/saving-tips", require("../routes/savingTip.routes"));
+app.use("/api/insights", require("../routes/insight.routes"));
+app.use("/api/notifications", require("../routes/notification.routes"));
+app.use("/api/bookmarks", require("../routes/bookmark.routes"));
+app.use("/api/notes", require("../routes/note.routes"));
+app.use("/api/reports", require("../routes/report.routes"));
+app.use("/api/dashboard", require("../routes/dashboard.routes"));
+app.use("/api/import", require("../routes/import.routes"));
+app.use("/api/ai", require("../routes/ai.routes"));
+app.use("/api/activity", require("../routes/activity.routes"));
 
 // ============ ADMIN ROUTES ============
-app.use("/api/admin", require("./routes/admin.routes"));
+app.use("/api/admin", require("../routes/admin.routes"));
 
 app.use(errorHandler);
 
