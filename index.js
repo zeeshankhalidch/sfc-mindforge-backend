@@ -69,7 +69,26 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/api", require("./routes/index"));
+
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/users", require("./routes/user.routes"));
+app.use("/api/categories", require("./routes/category.routes"));
+app.use("/api/transactions", require("./routes/transaction.routes"));
+app.use("/api/budgets", require("./routes/budget.routes"));
+app.use("/api/recurring", require("./routes/recurring.routes"));
+app.use("/api/saving-tips", require("./routes/savingTip.routes"));
+app.use("/api/insights", require("./routes/insight.routes"));
+app.use("/api/notifications", require("./routes/notification.routes"));
+app.use("/api/bookmarks", require("./routes/bookmark.routes"));
+app.use("/api/notes", require("./routes/note.routes"));
+app.use("/api/reports", require("./routes/report.routes"));
+app.use("/api/dashboard", require("./routes/dashboard.routes"));
+app.use("/api/import", require("./routes/import.routes"));
+app.use("/api/ai", require("./routes/ai.routes"));
+app.use("/api/activity", require("./routes/activity.routes"));
+
+// ============ ADMIN ROUTES ============
+app.use("/api/admin", require("./routes/admin.routes"));
 
 app.use(errorHandler);
 
