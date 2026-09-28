@@ -20,7 +20,8 @@ app.use(cors({
     "http://localhost:5173",
     "http://localhost:3000",
     "http://localhost:3001",
-    "https://sfc-mindforge-frontend.vercel.app"
+    "https://sfc-mindforge-frontend.vercel.app",
+    "https://sfc-mindforge-backend.vercel.app"
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
@@ -30,7 +31,18 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(helmet({ crossOriginResourcePolicy: false }));
 
-ConnectDB().catch((err) => console.error("DB connect failed:", err.message));
+app.use(async (req, res, next) => {
+  try {
+    await ConnectDB();
+    next();
+  } catch (error) {
+    return res.status(503).json({
+      success: false,
+      message: "Database connection failed. Please try again.",
+      error: error.message,
+    });
+  }
+});
 
 app.get("/", (req, res) => {
   const dbState = mongoose.connection.readyState;
@@ -47,6 +59,28 @@ app.get("/", (req, res) => {
     database: {
       status: states[dbState] || "Unknown",
       readyState: dbState,
+      name: mongoose.connection.name || null,
+      host: mongoose.connection.host || null,
+    },
+    timestamp: new Date().toLocaleString(),
+  });
+});
+
+app.get("/health", async (req, res) => {
+  const dbState = mongoose.connection.readyState;
+  const states = {
+    0: "Disconnected",
+    1: "Connected",
+    2: "Connecting",
+    3: "Disconnecting",
+  };
+  const isHealthy = dbState === 1;
+
+  res.status(isHealthy ? 200 : 503).json({
+    success: isHealthy,
+    server: { status: "Running" },
+    database: {
+      status: states[dbState],
       name: mongoose.connection.name || null,
       host: mongoose.connection.host || null,
     },
